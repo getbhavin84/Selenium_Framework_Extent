@@ -27,6 +27,7 @@ public class ExtentManager {
 			extent = new ExtentReports();
 			extent.attachReporter(spark);
 		}
+		extent.flush();
 		return extent;
 	}
 }
