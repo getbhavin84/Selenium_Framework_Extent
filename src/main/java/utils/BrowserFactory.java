@@ -10,14 +10,16 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class BrowserFactory {
 	public static WebDriver driver;
 	public static void killAllChromeDrivers() {
-		try {
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c",
-					"taskkill /F /IM chromedriver.exe /T");
-			pb.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    try {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c",
+                    "taskkill /F /IM chromedriver.exe /T");
+            pb.start();
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
 	public static void initDriver() {
 		if (driver == null) {
