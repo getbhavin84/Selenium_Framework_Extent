@@ -1,6 +1,7 @@
 package pages;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,8 +15,7 @@ public class LoginPage {
 	WebDriver driver;
 	WebDriverWait wait;
 
-	public By loginBtn = By.xpath(
-			"//a[contains(text(),'Login') or contains(text(),'Sign in')]");
+	public By loginBtn = By.xpath("//a[contains(text(),'Login') or contains(text(),'Sign in')]");
 	public By email = By.xpath("//input[contains(@placeholder,'Email')]");
 	public By password = By.xpath("//input[@type='password']");
 	public By submit = By.xpath("//button[contains(text(),'Login')]");
@@ -27,27 +27,75 @@ public class LoginPage {
 
 	public void openLoginPopup() {
 		wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
+	//	Assert.assertEquals(driver.findElement(loginBtn).isDisplayed(), true, "Failled");
+
 	}
 
 	public void enterUsername(String user) {
-		wait.until(ExpectedConditions.visibilityOfElementLocated(email))
-				.sendKeys(user);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(email)).sendKeys(user);
 	}
 
 	public void enterPassword(String pass) {
-		wait.until(ExpectedConditions.visibilityOfElementLocated(password))
-				.sendKeys(pass);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(password)).sendKeys(pass);
 	}
 
 	public void clickLogin() throws InterruptedException {
 		wait.until(ExpectedConditions.elementToBeClickable(submit)).click();
-		Thread.sleep(3000);
+		// Thread.sleep(3000);
+	//	System.out.println(driver.getCurrentUrl());
+
+//		try {
+//
+//			WebDriverWait shortWait =
+//					new WebDriverWait(driver, Duration.ofSeconds(10));
+//
+//			WebElement okBtn =
+//					shortWait.until(ExpectedConditions.elementToBeClickable(
+//							By.xpath("//*[normalize-space()='OK']")));
+//
+//			okBtn.click();
+//
+//			System.out.println("Password popup closed");
+//
+//		} catch (Exception e) {
+//
+//			System.out.println("Popup not found");
+//			e.printStackTrace();
+//		}
+		
+		
+		
+	//ChatBot Handle
+		try {
+			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+			if (driver.findElement(By.xpath("//div[@class='chatbot_Nav']/div"))
+					.isDisplayed()) {
+
+				driver.findElement(By.xpath("//div[@class='chatbot_Nav']/div"))
+						.click();
+				System.out.println("chatbot closed");
+			}
+		}
+
+		catch (Exception e) {
+			System.out.println("No chatbot handelling needed");
+		}
+
+		
+
+	//	System.out.println(driver.getPageSource().contains("Change your password"));
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@alt='naukri user profile image']"))).click();
+
 		// Clicking on my naukri logo
-		driver.findElement(By.xpath("//img[@alt='naukri user profile img']"))
-				.click();
+		// driver.findElement(By.xpath("//img[@alt='naukri user profile img']"))
+		// .click();
 
 		// Clicking on View & Update Profile link
-		driver.findElement(By.linkText("View & Update Profile")).click();
+
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("View & Update Profile"))).click();
+
+		// driver.findElement(By.linkText("View & Update Profile")).click();
 
 		System.out.println("clicked on my naukri");
 		// driver.findElement(By.linkText("Edit Profile")).click();
@@ -55,19 +103,23 @@ public class LoginPage {
 		// Delete Existing resume
 
 		System.out.println("Deleting exsisting resume...");
-		String lastuploadTimebeforedelete = driver
-				.findElement(By.xpath("//div[contains(@class,'updateOn')]"))
+		String lastuploadTimebeforedelete = driver.findElement(By.xpath("//div[contains(@class,'updateOn')]"))
 				.getText();
 
-		driver.findElement(
-				By.xpath("//*[@title='Click here to delete your resume']"))
-				.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Click here to delete your resume']")))
+		.click();
+
+	
+		// driver.findElement(
+		// By.xpath("//*[@title='Click here to delete your resume']"))
+		// .click();
 
 		// p[normalize-space(text())='Are you sure you want to delete the
 		// Resume?']/following::button
-		driver.findElement(By.xpath(
-				"//p[contains(normalize-space(text()),'Are you sure you want to delete the resume?')]/following::button"))
-				.click();
+
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+				"//p[contains(normalize-space(text()),'Are you sure you want to delete the resume?')]/following::button")))
+		.click();
 
 		Thread.sleep(2000);
 		System.out.println("Deleted successfully");
@@ -76,9 +128,8 @@ public class LoginPage {
 		// chatBot-ic-cross']")).click();
 		// div[@class='crossIcon chatBot chatBot-ic-cross']
 		/*
-		 * WebElement eleprofile2 =
-		 * driver.findElement(By.xpath("//li[2]/a/div[2]")); Actions builder2 =
-		 * new Actions(driver);
+		 * WebElement eleprofile2 = driver.findElement(By.xpath("//li[2]/a/div[2]"));
+		 * Actions builder2 = new Actions(driver);
 		 * builder2.moveToElement(eleprofile2).build().perform();
 		 * System.out.println("clicked on my naukri");
 		 * driver.findElement(By.linkText("Edit Profile")).click();
@@ -88,8 +139,7 @@ public class LoginPage {
 		 * //driver.findElement(By.xpath("//a[normalize-space(text())='Update']"
 		 * )).click ();
 		 * 
-		 * Thread.sleep(3000); //
-		 * builder.moveToElement(driver.findElement(By.xpath(
+		 * Thread.sleep(3000); // builder.moveToElement(driver.findElement(By.xpath(
 		 * "//*[@id='attachCV']"))). click().build().perform();;
 		 * 
 		 * // builder.keyDown(Keys.TAB).keyUp(Keys.TAB).perform();;
@@ -109,14 +159,11 @@ public class LoginPage {
 		System.out.println("Attaching new...");
 
 		driver.findElement(By.id("attachCV")).clear();
-		driver.findElement(By.id("attachCV")).sendKeys(new CharSequence[]{
-				"F:\\RESUME\\19feb24RESUME COLLECTION\\Bhavin Soni Test Manager Automation and Manual Testing 15yrs.docx"});
+		driver.findElement(By.id("attachCV")).sendKeys(
+				new CharSequence[] { "F:\\RESUME\\Bhavin Soni Test Manager Automation and Manual Testing 15yrs.docx" });
 		Thread.sleep(2000);
-		String uploadTimeNew = driver
-				.findElement(By.xpath("//div[contains(@class,'updateOn')]"))
-				.getText();
-		System.out.println(
-				"Last updated this resume at: " + lastuploadTimebeforedelete);
+		String uploadTimeNew = driver.findElement(By.xpath("//div[contains(@class,'updateOn')]")).getText();
+		System.out.println("Last updated this resume at: " + lastuploadTimebeforedelete);
 		System.out.println("New updated this resume now at: " + uploadTimeNew);
 		System.out.println("Closing browser..");
 
