@@ -17,5 +17,5 @@ jobs:
           java-version: '11'
           cache: maven
 
-      - name: Run Maven clean
-        run: mvn clean
+      - name: Run Maven clean test -Dheaded=true
+        run: mvn clean test -Dheaded=true
